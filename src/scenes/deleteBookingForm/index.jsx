@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const RoomForm = () => {
+const DeleteBooking = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const handleFormSubmit = async (values) => {
@@ -23,7 +23,7 @@ const RoomForm = () => {
         "roomType": String(values.roomName)
       })
     })
-    if (numRoom.status === 200) {
+    if (numRoom.status == 200) {
       toast.success("Room Added");
     }
     else {
@@ -134,6 +134,9 @@ const RoomForm = () => {
   );
 };
 
+const phoneRegExp =
+  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
+
 const checkoutSchema = yup.object().shape({
   roomId: yup.string().required("required"),
   roomName: yup.string().required("required"),
@@ -148,4 +151,4 @@ const initialValues = {
   max_rooms: "",
 };
 
-export default RoomForm;
+export default DeleteBooking;

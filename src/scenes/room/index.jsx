@@ -1,36 +1,39 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import Header from "../../components/Header";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 
-const Team = () => {
+const Room = () => {  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [items, setItems] = useState([]);
+  const [selectedRows, setSelectedRows] = useState({});
+  console.log(selectedRows);
+ 
   const reserveRoom = async () => {
-    const numRoom = await fetch('/api/getBookings', {
-      method: 'GET',
-      headers: {
-        'Content-type': 'application/json'
-      },
-    })
-    let rooms = numRoom.json();
-    rooms.then((val) => {
-      setItems(val);
-    }).catch((err) => {
-      console.log("There's an error");
-    })
-  }
-  const handleClik = () => {
-    console.log("hello");
+      const numRoom = await fetch('/api/getRoom', {
+          method: 'GET',
+          headers: {
+              'Content-type': 'application/json'
+          },
+      })
+      let rooms = numRoom.json();
+      rooms.then((val) => {
+          console.log("values returned:", val);
+          setItems(val);
+      }).catch((err) => {
+          console.log("There's an error");
+      })
   }
 
-  useEffect(() => {
+  useEffect(()=>{
     reserveRoom();
-  }, []);
+  },[]);
+  
   const columns = [
-    { field: "booking_id", headerName: "ID" },
+    { field: "id", headerName: "ID" },
     {
       field: "name",
       headerName: "Name",
@@ -38,54 +41,25 @@ const Team = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "max_guests",
+      headerName: "Max Guests",
+      type: "number",
       headerAlign: "left",
       align: "left",
     },
     {
-      field: "phone_number",
-      headerName: "Phone Number",
+      field: "max_rooms",
+      headerName: "Max Room",
       flex: 1,
     },
     {
-      field: "checkintimestamp",
-      headerName: "Check In",
+      headerName:"Delete",
       flex: 1,
-    },
-    {
-      field: "checkouttimestamp",
-      headerName: "Check Out",
-      flex: 1,
-    },
-    {
-      field: "booking_timestamp",
-      headerName: "Booking Date",
-      flex: 1,
-    },
-    {
-      field: "num_of_guests",
-      headerName: "Number Of Guests",
-      type: "number",
-      flex: 1,
-    },
-    {
-      field: "num_of_rooms",
-      headerName: "Number Of Rooms",
-      type: "number",
-      flex: 1,
-    },
-    {
-      field: "room_type",
-      headerName: "Room Type",
-      flex: 1,
-    },
-    {
-      headerName: "Delete",
-      flex: 1,
-      sortable: false,
+      sortable:false,
       renderCell: () => {
-
+        const handleClick = ()=>{
+          console.log("hello");
+        }
         return (
           <Box
             width="60%"
@@ -94,10 +68,10 @@ const Team = () => {
             display="flex"
             justifyContent="center"
             backgroundColor={
-              colors.redAccent[600]
+             colors.redAccent[600]
             }
             borderRadius="4px"
-            onClick={handleClik}
+            onClick={handleClick}
           >
             Delete
           </Box>
@@ -108,7 +82,7 @@ const Team = () => {
 
   return (
     <Box m="20px">
-      <Header title="Bookings" subtitle="Manage the Bookings" />
+      <Header title="Room" subtitle="Managing the Rooms" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -138,16 +112,11 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={items} columns={columns} getRowId={(row) => row.booking_id} onSelectionModelChange={(ids) => {
-          const selectedIDs = new Set(ids);
-          const selectedRowData = items.filter((item) =>
-            selectedIDs.has(item.booking_id.toString())
-          );
-          console.log(selectedRowData);
-        }} />
+        <DataGrid checkboxSelection rows={items} columns={columns}
+        />
       </Box>
     </Box>
   );
 };
 
-export default Team;
+export default Room;
