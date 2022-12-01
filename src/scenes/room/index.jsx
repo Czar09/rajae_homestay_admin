@@ -1,7 +1,6 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import Header from "../../components/Header";
 import { useEffect, useState} from "react";
 
@@ -9,8 +8,6 @@ const Room = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [items, setItems] = useState([]);
-  const [selectedRows, setSelectedRows] = useState({});
-  console.log(selectedRows);
  
   const reserveRoom = async () => {
       const numRoom = await fetch('/api/getRoom', {
